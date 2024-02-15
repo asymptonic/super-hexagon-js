@@ -11,7 +11,7 @@ export const patterns: [
   [true, true, true, true, true, false],
   [true, true, true, true, false, false],
   [true, true, false, true, true, false],
-  [true, false, true, false, true, false],
+  [true, true, true, false, true, false],
 ];
 
 export function drawHexagonToBuffer(
@@ -29,6 +29,7 @@ export function drawHexagonToBuffer(
     { x: radius * 0.5, y: radius * -0.866 },
   ];
 
+  // Draw lines between the points of the hexagon
   for (let i = 0; i < points.length; i++) {
     const point1 = points[i];
     const point2 = points[(i + 1) % points.length];

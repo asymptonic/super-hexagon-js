@@ -1,8 +1,5 @@
-import chalk from "chalk";
-import { hslToRgb } from "./color";
-import { drawLineToBuffer } from "./renderingEngine/drawLine";
-import { renderBuffer } from "./renderingEngine/renderBuffer";
 import { drawHexagonToBuffer, patterns } from "./renderingEngine/drawHexagon";
+import { renderBuffer } from "./renderingEngine/renderBuffer";
 
 export const obstacleSpacing = 3.5;
 
@@ -26,11 +23,13 @@ obstacles.push({ distance: 7 + obstacleSpacing * 2, pattern: 2, offset: 1 });
 obstacles.push({ distance: 7 + obstacleSpacing * 3, pattern: 0, offset: 3 });
 
 function runTick() {
+  // Clear the console and buffer for new frame
   console.clear();
   frameBuffer = new Array(process.stdout.rows - 2)
     .fill(0)
     .map(() => new Array(process.stdout.columns).fill(0));
 
+  // TEST IMAGE
   // drawLineToBuffer(1, -1, 1, 1, -1);
   // drawLineToBuffer(1, -2, -1, 2, 1);
   // drawLineToBuffer(1, 5, 0, -5, 0);
@@ -39,6 +38,7 @@ function runTick() {
   // Center Hexagon
   drawHexagonToBuffer(1, -1, 0, rotation);
 
+  // Remove past obstacles and add new ones
   obstacles = obstacles.filter((obstacle) => obstacle.distance > position + 1);
   if (obstacles.length < 4) {
     obstacles.push({
@@ -48,11 +48,20 @@ function runTick() {
     });
   }
 
+  // Draw out obstacles to buffer
   for (const obstacle of obstacles) {
-    drawHexagonToBuffer(obstacle.distance - position, obstacle.pattern, obstacle.offset, rotation);
+    drawHexagonToBuffer(
+      obstacle.distance - position,
+      obstacle.pattern,
+      obstacle.offset,
+      rotation
+    );
   }
 
+  // Render out the buffer to the console
   renderBuffer();
+
+  // Update game variables
   tick += 0.002;
   position += 0.1;
   rotation += 0.05;
