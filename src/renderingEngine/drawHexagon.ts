@@ -1,6 +1,25 @@
 import { drawLineToBuffer } from "./drawLine";
 
-export function drawHexagonToBuffer(radius: number, rotation: number) {
+export const patterns: [
+  boolean,
+  boolean,
+  boolean,
+  boolean,
+  boolean,
+  boolean
+][] = [
+  [true, true, true, true, true, false],
+  [true, true, true, true, false, false],
+  [true, true, false, true, true, false],
+  [true, false, true, false, true, false],
+];
+
+export function drawHexagonToBuffer(
+  radius: number,
+  pattern: number,
+  offset: number,
+  rotation: number
+) {
   const points: { x: number; y: number }[] = [
     { x: radius, y: 0 },
     { x: radius * 0.5, y: radius * 0.866 },
@@ -14,12 +33,13 @@ export function drawHexagonToBuffer(radius: number, rotation: number) {
     const point1 = points[i];
     const point2 = points[(i + 1) % points.length];
 
-    drawLineToBuffer(
-      1,
-      point1.x * Math.cos(rotation) - point1.y * Math.sin(rotation),
-      point1.y * Math.cos(rotation) + point1.x * Math.sin(rotation),
-      point2.x * Math.cos(rotation) - point2.y * Math.sin(rotation),
-      point2.y * Math.cos(rotation) + point2.x * Math.sin(rotation)
-    );
+    if (pattern === -1 || patterns[pattern][(i + offset) % points.length])
+      drawLineToBuffer(
+        1,
+        point1.x * Math.cos(rotation) - point1.y * Math.sin(rotation),
+        point1.y * Math.cos(rotation) + point1.x * Math.sin(rotation),
+        point2.x * Math.cos(rotation) - point2.y * Math.sin(rotation),
+        point2.y * Math.cos(rotation) + point2.x * Math.sin(rotation)
+      );
   }
 }
