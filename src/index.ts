@@ -1,10 +1,13 @@
 import { drawHexagonToBuffer, patterns } from "./renderingEngine/drawHexagon";
+import { drawPlayerToBuffer } from "./renderingEngine/drawPlayer";
 import { renderBuffer } from "./renderingEngine/renderBuffer";
 
 export const obstacleSpacing = 3.5;
 
 export let tick = 0;
 export let rotation = 0;
+export let playerRotation = 0;
+export let playerRotationTarget = 0;
 export const scale = 7;
 export const hscale = 0.45;
 export let frameBuffer: number[][] = [[]];
@@ -29,14 +32,17 @@ function runTick() {
     .fill(0)
     .map(() => new Array(process.stdout.columns).fill(0));
 
-  // TEST IMAGE
+  playerRotation += (playerRotationTarget - playerRotation) / 3;
+
+  // TEST PATTERN
   // drawLineToBuffer(1, -1, 1, 1, -1);
   // drawLineToBuffer(1, -2, -1, 2, 1);
   // drawLineToBuffer(1, 5, 0, -5, 0);
   // drawLineToBuffer(1, 1, -1, 2, 1);
 
-  // Center Hexagon
+  // Center Hexagon + Player
   drawHexagonToBuffer(1, -1, 0, rotation);
+  drawPlayerToBuffer(1.45, rotation + playerRotation);
 
   // Remove past obstacles and add new ones
   obstacles = obstacles.filter((obstacle) => obstacle.distance > position + 1);
@@ -66,5 +72,23 @@ function runTick() {
   position += 0.1;
   rotation += 0.05;
 }
+
+process.stdin.setRawMode(true);
+process.stdin.resume();
+
+process.stdin.on("data", (data) => {
+  const value = data.toString();
+
+  if (value == "\u001B\u005B\u0043") {
+    playerRotationTarget -= 0.5;
+  }
+  if (value == "\u001B\u005B\u0044") {
+    playerRotationTarget += 0.5;
+  }
+
+  if (value == "\u0003") {
+    process.exit();
+  } // ctrl-c
+});
 
 setInterval(runTick, 33);

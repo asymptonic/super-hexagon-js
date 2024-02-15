@@ -26,11 +26,11 @@ export function renderBuffer() {
         screenBuffer +=
           prevInt === 0
             ? chalk.rgb(...hslToRgb(tick % 1, 1, 0.1))(lineBuffer)
-            : chalk.rgb(...hslToRgb(tick % 1, 1, 0.5))(lineBuffer);
+            : chalk.bgRgb(...hslToRgb(tick % 1, 1, 0.5))(lineBuffer);
         lineBuffer = "";
       }
       prevInt = row[i];
-      lineBuffer += row[i] === 0 ? " " : "=";
+      lineBuffer += row[i] === 0 ? " " : " ";
       // lineBuffer += row[i];
     }
     screenBuffer += "\n";
