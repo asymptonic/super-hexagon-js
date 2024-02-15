@@ -23,7 +23,7 @@ export function drawLineToBuffer(
     for (let col = 0; col < width; col++) {
       const slope = (y2 - y1) / (x2 - x1);
 
-      const x = ((col - width / 2) * 0.4) / scale;
+      const x = ((col - width / 2) * 0.45) / scale;
       const y = Math.round(height / 2 - (slope * (x - x1) + y1) * scale);
 
       if (y >= 0 && y < height && x >= x1 && x <= x2) {
@@ -43,9 +43,9 @@ export function drawLineToBuffer(
     for (let row = 0; row < height; row++) {
       const inverseSlope = (x2 - x1) / (y2 - y1);
 
-      const y = (row - height / 2) / scale;
+      const y = (height / 2 - row) / scale;
       const x = Math.round(
-        width / 2 - ((inverseSlope * (y - y2) - x1) * scale) / 0.4
+        width / 2 + ((inverseSlope * (y - y2) + x2) * scale) / 0.45
       );
 
       if (x >= 0 && x < width && y <= y2 && y >= y1) {

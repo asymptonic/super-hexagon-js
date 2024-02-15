@@ -1,9 +1,12 @@
 import chalk from "chalk";
 import { hslToRgb } from "./color";
-import { drawLineToBuffer } from "./renderingEngine/line";
+import { drawLineToBuffer } from "./renderingEngine/drawLine";
+import { renderBuffer } from "./renderingEngine/renderBuffer";
+import { drawHexagonToBuffer } from "./renderingEngine/drawHexagon";
 
-let tick = 0;
-export const scale = 10;
+export let tick = 0;
+export let rotation = 0;
+export const scale = 5;
 export let frameBuffer: number[][] = [[]];
 // Buffer Values:
 // 0 - Empty
@@ -16,7 +19,7 @@ function runTick() {
     .fill(0)
     .map(() => new Array(process.stdout.columns).fill(0));
 
-  const leftHeader = "SUPER HEXAGON";
+  const leftHeader = "SUPERB HEXAGON";
   const rightHeader = `Frame Buffer Dimentions [ ${frameBuffer[0].length} x ${frameBuffer.length} ]`;
   console.log(
     chalk.rgb(...hslToRgb(tick % 1, 1, 0.5)).bold(leftHeader) +
@@ -26,33 +29,19 @@ function runTick() {
       chalk.rgb(...hslToRgb(tick % 1, 1, 0.5))(rightHeader)
   );
 
-  drawLineToBuffer(1, -1, 1, 1, -1);
-  drawLineToBuffer(1, -2, -1, 2, 1);
-  drawLineToBuffer(1, 5, 0, -5, 0);
-  drawLineToBuffer(1, 1, -1, 2, 1);
+  // drawLineToBuffer(1, -1, 1, 1, -1);
+  // drawLineToBuffer(1, -2, -1, 2, 1);
+  // drawLineToBuffer(1, 5, 0, -5, 0);
+  // drawLineToBuffer(1, 1, -1, 2, 1);
 
-  for (const row of frameBuffer) {
-    let lineBuffer = "";
-    let prevInt = 0;
+  // drawLineToBuffer(1, -3, 0, 3, 0);
+  drawHexagonToBuffer(1, rotation);
+  drawHexagonToBuffer(5, rotation);
+  drawHexagonToBuffer(7, rotation);
 
-    for (let i = 0; i < row.length; i++) {
-      if (row[i] !== prevInt) {
-        process.stdout.write(
-          prevInt === 0
-            ? chalk.rgb(...hslToRgb(tick % 1, 1, 0.1))(lineBuffer)
-            : chalk.bgRgb(...hslToRgb(tick % 1, 1, 0.5))(lineBuffer)
-        );
-        lineBuffer = "";
-      }
-      prevInt = row[i];
-      lineBuffer += row[i] === 0 ? " " : " ";
-    }
-    console.log();
-    // console.log(chalk.rgb(...hslToRgb(tick % 1, 1, 0.1))(lineBuffer))
-  }
-
-  tick += 0.02;
+  renderBuffer();
+  tick += 0.002;
+  rotation += 0.05
 }
 
-
-setInterval(runTick, 500);
+setInterval(runTick, 33);
