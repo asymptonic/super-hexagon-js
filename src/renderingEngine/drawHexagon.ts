@@ -1,4 +1,5 @@
-import { drawLineToBuffer } from "./drawLine";
+import { applyCamera } from './camera';
+import { drawLineToBuffer } from './drawLine';
 
 export const patterns: [
   boolean,
@@ -36,11 +37,15 @@ export function drawHexagonToBuffer(
 
     if (pattern === -1 || patterns[pattern][(i + offset) % points.length])
       drawLineToBuffer(
-        1,
-        point1.x * Math.cos(rotation) - point1.y * Math.sin(rotation),
-        point1.y * Math.cos(rotation) + point1.x * Math.sin(rotation),
-        point2.x * Math.cos(rotation) - point2.y * Math.sin(rotation),
-        point2.y * Math.cos(rotation) + point2.x * Math.sin(rotation)
+        9,
+        ...applyCamera(
+          point1.x * Math.cos(rotation) - point1.y * Math.sin(rotation),
+          point1.y * Math.cos(rotation) + point1.x * Math.sin(rotation)
+        ),
+        ...applyCamera(
+          point2.x * Math.cos(rotation) - point2.y * Math.sin(rotation),
+          point2.y * Math.cos(rotation) + point2.x * Math.sin(rotation)
+        )
       );
   }
 }

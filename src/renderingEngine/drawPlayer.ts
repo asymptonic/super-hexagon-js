@@ -1,4 +1,5 @@
-import { drawLineToBuffer } from "./drawLine";
+import { applyCamera } from './camera';
+import { drawLineToBuffer } from './drawLine';
 
 export function drawPlayerToBuffer(radius: number, rotation: number) {
   const points: { x: number; y: number }[] = [
@@ -13,11 +14,15 @@ export function drawPlayerToBuffer(radius: number, rotation: number) {
     const point2 = points[(i + 1) % points.length];
 
     drawLineToBuffer(
-      1,
-      point1.x * Math.cos(rotation) - point1.y * Math.sin(rotation),
-      point1.y * Math.cos(rotation) + point1.x * Math.sin(rotation),
-      point2.x * Math.cos(rotation) - point2.y * Math.sin(rotation),
-      point2.y * Math.cos(rotation) + point2.x * Math.sin(rotation)
+      9,
+      ...applyCamera(
+        point1.x * Math.cos(rotation) - point1.y * Math.sin(rotation),
+        point1.y * Math.cos(rotation) + point1.x * Math.sin(rotation)
+      ),
+      ...applyCamera(
+        point2.x * Math.cos(rotation) - point2.y * Math.sin(rotation),
+        point2.y * Math.cos(rotation) + point2.x * Math.sin(rotation)
+      )
     );
   }
 }

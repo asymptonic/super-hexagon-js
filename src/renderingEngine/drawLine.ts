@@ -7,8 +7,8 @@ export function drawLineToBuffer(
   x2: number,
   y2: number
 ) {
-  let width = frameBuffer[0].length;
-  let height = frameBuffer.length;
+  const width = frameBuffer[0].length;
+  const height = frameBuffer.length;
 
   if (Math.abs(y2 - y1) <= Math.abs(x2 - x1)) {
     if (x1 > x2) {

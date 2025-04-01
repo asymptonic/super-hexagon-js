@@ -1,14 +1,15 @@
+import { drawBackdropToBuffer } from "./renderingEngine/drawBackdrop";
 import { drawHexagonToBuffer, patterns } from "./renderingEngine/drawHexagon";
 import { drawPlayerToBuffer } from "./renderingEngine/drawPlayer";
 import { renderBuffer } from "./renderingEngine/renderBuffer";
 
-export const obstacleSpacing = 3.5;
+export const obstacleSpacing = 4;
 
 export let tick = 0;
 export let rotation = 0;
 export let playerRotation = 0;
 export let playerRotationTarget = 0;
-export const scale = 7;
+export const scale = 20;
 export const hscale = 0.45;
 export let frameBuffer: number[][] = [[]];
 // Buffer Values:
@@ -40,6 +41,8 @@ function runTick() {
   // drawLineToBuffer(1, 5, 0, -5, 0);
   // drawLineToBuffer(1, 1, -1, 2, 1);
 
+  drawBackdropToBuffer();
+
   // Center Hexagon + Player
   drawHexagonToBuffer(1, -1, 0, rotation);
   drawPlayerToBuffer(1.45, rotation + playerRotation);
@@ -65,12 +68,12 @@ function runTick() {
   }
 
   // Render out the buffer to the console
-  renderBuffer();
+  process.stdout.write(renderBuffer());
 
   // Update game variables
-  tick += 0.002;
+  tick += 0.0025;
   position += 0.1;
-  rotation += 0.05;
+  rotation += 0.025;
 }
 
 process.stdin.setRawMode(true);
