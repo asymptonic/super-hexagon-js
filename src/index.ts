@@ -3,6 +3,8 @@ import { drawHexagonToBuffer, patterns } from "./renderingEngine/drawHexagon";
 import { drawPlayerToBuffer } from "./renderingEngine/drawPlayer";
 import { renderBuffer } from "./renderingEngine/renderBuffer";
 
+export const MODE: 'terminal' | 'html' = 'terminal';
+
 export const obstacleSpacing = 4;
 
 export let tick = 0;
@@ -71,7 +73,7 @@ function runTick() {
   process.stdout.write(renderBuffer());
 
   // Update game variables
-  tick += 0.0025;
+  tick += 0.0015;
   position += 0.1;
   rotation += 0.025;
 }
@@ -94,4 +96,4 @@ process.stdin.on("data", (data) => {
   } // ctrl-c
 });
 
-setInterval(runTick, 33);
+setInterval(runTick, 16);

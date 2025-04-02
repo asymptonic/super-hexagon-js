@@ -20,3 +20,18 @@ export function applyCamera(x: number, y: number): [number, number] {
 
   return [(x / z) * camera.FOV, (y / z) * camera.FOV];
 }
+
+export function unapplyCamera(x: number, y: number): [number, number] {
+  let z = 0;
+  x /= camera.FOV;
+  y /= camera.FOV;
+  x /= Math.cos(camera.yaw);
+  y /= Math.cos(camera.pitch);
+  z = z / Math.cos(camera.yaw) + x * Math.sin(camera.yaw);
+  z = z / Math.cos(camera.pitch) - y * Math.sin(camera.pitch);
+  x += camera.x;
+  y += camera.y;
+  z -= camera.z;
+
+  return [x, y];
+}

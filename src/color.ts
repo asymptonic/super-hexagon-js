@@ -26,3 +26,19 @@ function hueToRgb(p: number, q: number, t: number) {
   if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
   return p;
 }
+
+export function rgbToHex(r: number, g: number, b: number) {
+  return (
+    '#' +
+    [r, g, b]
+      .map((x) => {
+        const hex = x.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+      })
+      .join('')
+  );
+}
+
+export function htmlColor(color: string, text: string) {
+  return `<span class="hexagon-text" style="background-color: ${color};">${text}</span>`;
+}

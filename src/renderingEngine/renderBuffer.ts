@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import { frameBuffer, tick } from '..';
-import { hslToRgb } from '../color';
+import { frameBuffer, MODE, tick } from '..';
+import { hslToRgb, htmlColor, rgbToHex } from '../color';
 
 export function renderBuffer() {
   let screenBuffer = '';
@@ -23,6 +23,14 @@ export function renderBuffer() {
 
     for (let i = 0; i < row.length; i++) {
       if (row[i] !== prevInt || i === row.length - 1) {
+        // screenBuffer +=
+        //   prevInt === 0 // Backdrop
+        //     ? htmlColor(rgbToHex(...hslToRgb(tick % 1, 1, 0.1)), lineBuffer)
+        //     : prevInt === 1 // Backdrop Light
+        //     ? htmlColor(rgbToHex(...hslToRgb(tick % 1, 1, 0.2)), lineBuffer)
+        //     : prevInt === 9 // Wall
+        //     ? htmlColor(rgbToHex(...hslToRgb(tick % 1, 1, 0.5)), lineBuffer)
+        //     : lineBuffer;
         screenBuffer +=
           prevInt === 0 // Backdrop
             ? chalk.bgRgb(...hslToRgb(tick % 1, 1, 0.1))(lineBuffer)
@@ -36,9 +44,8 @@ export function renderBuffer() {
       prevInt = row[i];
       lineBuffer += " ";
       // lineBuffer += row[i];
-      // lineBuffer += row[i];
     }
-    screenBuffer += '\n';
+    screenBuffer += MODE === 'html' ? '<br>' : '\n';
   }
   return screenBuffer;
 }
