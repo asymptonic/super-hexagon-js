@@ -13,10 +13,10 @@ export function applyCamera(x: number, y: number): [number, number] {
   x -= camera.x;
   y -= camera.y;
   z += camera.z;
-  z = z * Math.cos(camera.yaw) - x * Math.sin(camera.yaw);
-  z = z * Math.cos(camera.pitch) + y * Math.sin(camera.pitch);
   x *= Math.cos(camera.yaw);
   y *= Math.cos(camera.pitch);
+  z = z * Math.cos(camera.yaw) + x * Math.sin(camera.yaw);
+  z = z * Math.cos(camera.pitch) + y * Math.sin(camera.pitch);
 
   return [(x / z) * camera.FOV, (y / z) * camera.FOV];
 }

@@ -1,4 +1,4 @@
-import { frameBuffer, hscale, scale } from "..";
+import { frameBuffer, HSCALE, SCALE } from "..";
 
 export function drawLineToBuffer(
   value: number,
@@ -21,11 +21,11 @@ export function drawLineToBuffer(
     }
 
     for (let col = 0; col < width; col++) {
-      const x = ((col - width / 2) * hscale) / scale;
+      const x = ((col - width / 2) * HSCALE) / SCALE;
       if (x < x1 || x > x2) continue;
 
       const slope = (y2 - y1) / (x2 - x1);
-      const y = Math.round(height / 2 - (slope * (x - x1) + y1) * scale);
+      const y = Math.round(height / 2 - (slope * (x - x1) + y1) * SCALE);
 
       if (y >= 0 && y < height) {
         frameBuffer[y][col] = value;
@@ -42,12 +42,12 @@ export function drawLineToBuffer(
     }
 
     for (let row = 0; row < height; row++) {
-      const y = (height / 2 - row) / scale;
+      const y = (height / 2 - row) / SCALE;
       if (y > y2 || y < y1) continue;
 
       const inverseSlope = (x2 - x1) / (y2 - y1);
       const x = Math.round(
-        width / 2 + ((inverseSlope * (y - y2) + x2) * scale) / hscale
+        width / 2 + ((inverseSlope * (y - y2) + x2) * SCALE) / HSCALE
       );
 
       if (x >= 0 && x < width) {

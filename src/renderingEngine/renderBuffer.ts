@@ -36,7 +36,9 @@ export function renderBuffer() {
             ? chalk.bgRgb(...hslToRgb(tick % 1, 1, 0.1))(lineBuffer)
             : prevInt === 1 // Backdrop Light
             ? chalk.bgRgb(...hslToRgb(tick % 1, 1, 0.2))(lineBuffer)
-            : prevInt === 9 // Wall
+            : prevInt === 8 // Wall Dark
+            ? chalk.bgRgb(...hslToRgb(tick % 1, 1, 0.45))(lineBuffer)
+            : prevInt === 9 // Wall Light
             ? chalk.bgRgb(...hslToRgb(tick % 1, 1, 0.5))(lineBuffer)
             : lineBuffer;
         lineBuffer = '';
