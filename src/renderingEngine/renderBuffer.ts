@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { frameBuffer, MODE, tick } from '..';
+import { frameBuffer, frameData, MODE, tick } from '..';
 import { hslToRgb, htmlColor, rgbToHex } from '../color';
 
 export function renderBuffer() {
@@ -7,7 +7,10 @@ export function renderBuffer() {
 
   // Header text
   const leftHeader = 'SUPERB HEXAGON';
-  const rightHeader = `Frame Buffer Dimentions [ ${frameBuffer[0].length} x ${frameBuffer.length} ]`;
+  const renderTime = Date.now() - frameData.startTimestamp;
+  const rightHeader = `Frame Buffer Dimentions [ ${frameBuffer[0].length} x ${
+    frameBuffer.length
+  } ] Render Time [${renderTime < 10 ? '0' : ''}${renderTime}ms] [${frameData.triangleCount} Triangles]`;
   screenBuffer +=
     chalk.rgb(...hslToRgb(tick % 1, 1, 0.5)).bold(leftHeader) +
     new Array(frameBuffer[0].length - leftHeader.length - rightHeader.length)
@@ -44,7 +47,7 @@ export function renderBuffer() {
         lineBuffer = '';
       }
       prevInt = row[i];
-      lineBuffer += " ";
+      lineBuffer += ' ';
       // lineBuffer += row[i];
     }
     screenBuffer += MODE === 'html' ? '<br>' : '\n';

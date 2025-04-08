@@ -1,5 +1,9 @@
 import { drawBackdropToBuffer } from './renderingEngine/drawBackdrop';
-import { drawHexagonToBuffer, patterns } from './renderingEngine/drawHexagon';
+import {
+  drawHexagonToBuffer,
+  fillInHexagonToBuffer,
+  patterns,
+} from './renderingEngine/drawHexagon';
 import { drawPlayerToBuffer } from './renderingEngine/drawPlayer';
 import { renderBuffer } from './renderingEngine/renderBuffer';
 
@@ -18,6 +22,8 @@ export let rotation = 0;
 export let playerRotation = 0;
 export let playerRotationTarget = 0;
 
+export const frameData = { startTimestamp: 0, triangleCount: 0 };
+
 export let position = 0;
 export let obstacles: { distance: number; pattern: number; offset: number }[] =
   [];
@@ -28,11 +34,13 @@ obstacles.push({ distance: 7 + OBSTACLE_SPACING * 2, pattern: 2, offset: 1 });
 obstacles.push({ distance: 7 + OBSTACLE_SPACING * 3, pattern: 0, offset: 3 });
 
 function runTick() {
-  // Clear the console and buffer for new frame
-  console.clear();
+  // Clear the buffer for new frame
   frameBuffer = new Array(process.stdout.rows - 2)
     .fill(0)
     .map(() => new Array(process.stdout.columns).fill(0));
+
+  frameData.startTimestamp = Date.now();
+  frameData.triangleCount = 0;
 
   playerRotation += (playerRotationTarget - playerRotation) / 3;
 
@@ -71,10 +79,12 @@ function runTick() {
   }
 
   // Center Hexagon + Player
+  fillInHexagonToBuffer(0, 1, rotation);
   drawHexagonToBuffer(1, 0.2, -1, 0, rotation, true);
   drawPlayerToBuffer(1.45, rotation + playerRotation);
 
   // Render out the buffer to the console
+  console.clear();
   process.stdout.write(renderBuffer());
 
   // Update game variables

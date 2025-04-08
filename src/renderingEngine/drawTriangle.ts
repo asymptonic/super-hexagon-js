@@ -1,4 +1,4 @@
-import { frameBuffer, HSCALE, SCALE } from '..';
+import { frameBuffer, frameData, HSCALE, SCALE } from '..';
 import { Point } from './utils/Point';
 
 let s1 = 0;
@@ -29,8 +29,25 @@ export function drawTriangleToBuffer(
   const width = frameBuffer[0].length;
   const height = frameBuffer.length;
 
-  for (let row = 0; row < height; row++) {
-    for (let col = 0; col < width; col++) {
+  const pixelA = pointToDecimalPixel(a);
+  const pixelB = pointToDecimalPixel(b);
+  const pixelC = pointToDecimalPixel(c);
+
+  const rowMin = Math.floor(
+    Math.max(Math.min(pixelA[0], pixelB[0], pixelC[0]), 0)
+  );
+  const rowMax = Math.ceil(
+    Math.min(Math.max(pixelA[0], pixelB[0], pixelC[0]), height)
+  );
+  const colMin = Math.floor(
+    Math.max(Math.min(pixelA[1], pixelB[1], pixelC[1]), 0)
+  );
+  const colMax = Math.ceil(
+    Math.min(Math.max(pixelA[1], pixelB[1], pixelC[1]), width)
+  );
+
+  for (let row = rowMin; row < rowMax; row++) {
+    for (let col = colMin; col < colMax; col++) {
       const x = ((col - 1 - width / 2) * HSCALE) / SCALE;
       const y = (height / 2 - row) / SCALE;
 
@@ -39,4 +56,16 @@ export function drawTriangleToBuffer(
       }
     }
   }
+
+  frameData.triangleCount++;
+}
+
+function pointToDecimalPixel(point: Point): [number, number] {
+  const width = frameBuffer[0].length;
+  const height = frameBuffer.length;
+
+  const col = (point.x * SCALE) / HSCALE + width / 2 + 1;
+  const row = -(point.y * SCALE - height / 2);
+
+  return [row, col];
 }
