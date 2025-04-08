@@ -78,7 +78,7 @@ export function drawHexagonToBuffer(
   }
 }
 
-export function fillInHexagonToBuffer(
+export function drawFilledInHexagonToBuffer(
   value: number,
   radius: number,
   rotation: number
