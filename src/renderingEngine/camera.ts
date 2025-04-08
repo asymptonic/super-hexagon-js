@@ -18,6 +18,10 @@ export function applyCamera(x: number, y: number): [number, number] {
   z = z * Math.cos(camera.pitch) + y * Math.sin(camera.pitch);
   y *= Math.cos(camera.pitch);
 
+  if (z < 0) {
+    z = -z;
+  }
+
   return [(x / z) * camera.FOV, (y / z) * camera.FOV];
 }
 
