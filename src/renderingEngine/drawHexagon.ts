@@ -77,3 +77,51 @@ export function drawHexagonToBuffer(
     }
   }
 }
+
+export function fillInHexagonToBuffer(
+  value: number,
+  radius: number,
+  rotation: number
+) {
+  const points: { x: number; y: number }[] = [
+    { x: radius, y: 0 },
+    { x: radius * 0.5, y: radius * 0.866 },
+    { x: radius * -0.5, y: radius * 0.866 },
+    { x: -radius, y: 0 },
+    { x: radius * -0.5, y: radius * -0.866 },
+    { x: radius * 0.5, y: radius * -0.866 },
+  ];
+
+  const cosr = Math.cos(rotation);
+  const sinr = Math.sin(rotation);
+
+  const a = new Point(
+    points[0].x * cosr - points[0].y * sinr,
+    points[0].y * cosr + points[0].x * sinr
+  ).applyCamera();
+  const b = new Point(
+    points[1].x * cosr - points[1].y * sinr,
+    points[1].y * cosr + points[1].x * sinr
+  ).applyCamera();
+  const c = new Point(
+    points[2].x * cosr - points[2].y * sinr,
+    points[2].y * cosr + points[2].x * sinr
+  ).applyCamera();
+  const d = new Point(
+    points[3].x * cosr - points[3].y * sinr,
+    points[3].y * cosr + points[3].x * sinr
+  ).applyCamera();
+  const e = new Point(
+    points[4].x * cosr - points[4].y * sinr,
+    points[4].y * cosr + points[4].x * sinr
+  ).applyCamera();
+  const f = new Point(
+    points[5].x * cosr - points[5].y * sinr,
+    points[5].y * cosr + points[5].x * sinr
+  ).applyCamera();
+
+  drawTriangleToBuffer(value, a, b, f);
+  drawTriangleToBuffer(value, b, f, c);
+  drawTriangleToBuffer(value, c, e, f);
+  drawTriangleToBuffer(value, c, d, e);
+}
