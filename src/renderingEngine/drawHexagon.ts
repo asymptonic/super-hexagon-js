@@ -18,7 +18,7 @@ export const patterns: [
 export function drawHexagonToBuffer(
   radius: number,
   thickness: number,
-  pattern: number,
+  pattern: [boolean, boolean, boolean, boolean, boolean, boolean],
   offset: number,
   rotation: number,
   center?: boolean
@@ -53,7 +53,7 @@ export function drawHexagonToBuffer(
     const point3 = outerPoints[i];
     const point4 = outerPoints[(i + 1) % outerPoints.length];
 
-    if (pattern === -1 || patterns[pattern][(i + offset) % points.length]) {
+    if (pattern[(offset + 6 - i) % points.length]) {
       const a = new Point(
         point1.x * cosr - point1.y * sinr,
         point1.y * cosr + point1.x * sinr
