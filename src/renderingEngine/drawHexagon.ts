@@ -124,4 +124,5 @@ export function drawFilledInHexagonToBuffer(
   drawTriangleToBuffer(value, b, f, c);
   drawTriangleToBuffer(value, c, e, f);
   drawTriangleToBuffer(value, c, d, e);
+  drawTriangleToBuffer(value, a, c, e);
 }

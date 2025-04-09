@@ -4,6 +4,7 @@ import {
   drawFilledInHexagonToBuffer,
   patterns,
 } from './renderingEngine/drawHexagon';
+import { drawHexagonLinesToBuffer } from './renderingEngine/drawHexagonLines';
 import { drawPlayerToBuffer } from './renderingEngine/drawPlayer';
 import { renderBuffer } from './renderingEngine/renderBuffer';
 
@@ -12,10 +13,10 @@ export const MODE: 'terminal' | 'html' = 'terminal';
 export const FPS_CAP = 60;
 export const TPS = 60;
 
-export const SCALE = 20;
+export const SCALE = 18;
 export const HSCALE = 0.45;
 
-export const OBSTACLE_SPACING = 4;
+export const OBSTACLE_SPACING = 6;
 export const HEXAGON_THICKNESS = 0.85;
 
 export let frameBuffer: number[][] = [];
@@ -25,6 +26,8 @@ export let rotation = 0;
 export let playerRotation = 0;
 export let playerRotationTarget = 0;
 export let lastTickTimestamp = 0;
+
+export let rotationSpeed = -0.005;
 
 export const frameData = { startTimestamp: 0, triangleCount: 0 };
 
@@ -57,7 +60,7 @@ function runTick() {
   // Update game variables
   tick += 0.0005;
   position += 0.1;
-  rotation += 0.005;
+  rotation += rotationSpeed;
 
   lastTickTimestamp = Date.now();
 }
@@ -92,7 +95,7 @@ function renderFrame() {
   isRenderingFrame = true;
 
   // Clear the buffer for new frame
-  frameBuffer = new Array(process.stdout.rows - 2)
+  frameBuffer = new Array(process.stdout.rows - 3)
     .fill(0)
     .map(() => new Array(process.stdout.columns).fill(0));
 
@@ -122,15 +125,23 @@ function renderFrame() {
 
   // Center Hexagon + Player
   drawFilledInHexagonToBuffer(0, 1, rotation);
-  drawHexagonToBuffer(1, 0.2, -1, 0, rotation, true);
+  drawHexagonLinesToBuffer(1, -1, 0, rotation);
   drawPlayerToBuffer(1.45, rotation + playerRotation);
 
   // Render out the buffer to the console
   console.clear();
-  process.stdout.write(renderBuffer());
+  console.log(renderBuffer());
 
   isRenderingFrame = false;
 }
 
 setInterval(runTick);
 setInterval(renderFrame);
+
+function flipRotation() {
+  rotationSpeed = -rotationSpeed;
+
+  setTimeout(flipRotation, Math.random() * 12 * 1000 + 2000);
+}
+
+flipRotation();
