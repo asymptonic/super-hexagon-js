@@ -33,21 +33,22 @@ export function drawTriangleToBuffer(
   const pixelB = pointToDecimalPixel(b);
   const pixelC = pointToDecimalPixel(c);
 
-  const rowMin = Math.floor(
+  const top = Math.floor(
     Math.max(Math.min(pixelA[0], pixelB[0], pixelC[0]), 0)
   );
-  const rowMax = Math.ceil(
+  const bottom = Math.ceil(
     Math.min(Math.max(pixelA[0], pixelB[0], pixelC[0]), height)
   );
-  const colMin = Math.floor(
+  const left = Math.floor(
     Math.max(Math.min(pixelA[1], pixelB[1], pixelC[1]), 0)
   );
-  const colMax = Math.ceil(
+  const right = Math.ceil(
     Math.min(Math.max(pixelA[1], pixelB[1], pixelC[1]), width)
   );
 
-  for (let row = rowMin; row < rowMax; row++) {
-    for (let col = colMin; col < colMax; col++) {
+  // Top row number is smaller than bottom since it is outputted from top to bottom
+  for (let row = top; row < bottom; row++) {
+    for (let col = left; col < right; col++) {
       const x = ((col - 1 - width / 2) * HSCALE) / SCALE;
       const y = (height / 2 - row) / SCALE;
 
