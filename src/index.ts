@@ -1,3 +1,8 @@
+import {
+  allObstaclePatterns,
+  HEXAGON_THICKNESS,
+  Obstacle,
+} from './game/obstacles';
 import { drawBackdropToBuffer } from './renderingEngine/drawBackdrop';
 import {
   drawHexagonToBuffer,
@@ -17,11 +22,11 @@ export const SCALE = 18;
 export const HSCALE = 0.45;
 
 export const OBSTACLE_SPACING = 6;
-export const HEXAGON_THICKNESS = 0.85;
+const STARTING_PADDING = 7;
 
 export let frameBuffer: number[][] = [];
 
-export let tick = 0;
+export let color = 0;
 export let rotation = 0;
 export let playerRotation = 0;
 export let playerRotationTarget = 0;
@@ -31,35 +36,49 @@ export let rotationSpeed = -0.005;
 
 export const frameData = { startTimestamp: 0, triangleCount: 0 };
 
-export let position = 0;
-export let obstacles: { distance: number; pattern: number; offset: number }[] =
-  [];
+export let obstacles: { distance: number; obstacle: Obstacle }[] = [];
 
-obstacles.push({ distance: 7, pattern: 0, offset: 0 });
-obstacles.push({ distance: 7 + OBSTACLE_SPACING * 1, pattern: 2, offset: 3 });
-obstacles.push({ distance: 7 + OBSTACLE_SPACING * 2, pattern: 2, offset: 1 });
-obstacles.push({ distance: 7 + OBSTACLE_SPACING * 3, pattern: 0, offset: 3 });
+obstacles.push(generateNewObstacle());
+obstacles.push(generateNewObstacle());
+obstacles.push(generateNewObstacle());
+obstacles.push(generateNewObstacle());
+obstacles.push(generateNewObstacle());
+
+function getCurrentMapLength() {
+  if (obstacles.length === 0) return STARTING_PADDING;
+  const finalObstacle = obstacles[obstacles.length - 1];
+  return (
+    finalObstacle.distance +
+    finalObstacle.obstacle.obstaclePattern.equivalentLength()
+  );
+}
+
+function generateNewObstacle(): (typeof obstacles)[0] {
+  return {
+    distance: getCurrentMapLength() + OBSTACLE_SPACING,
+    obstacle: new Obstacle(
+      allObstaclePatterns[
+        Math.floor(Math.random() * allObstaclePatterns.length)
+      ],
+      Math.floor(Math.random() * 6)
+    ),
+  };
+}
 
 function runTick() {
   if (Date.now() - lastTickTimestamp < 1000 / TPS) return; // Cap Ticks Per Second
 
   // Remove past obstacles and add new ones
   obstacles = obstacles.filter(
-    (obstacle) => obstacle.distance > position + 1 - HEXAGON_THICKNESS
+    (o) => o.distance + o.obstacle.obstaclePattern.equivalentLength() + HEXAGON_THICKNESS > 0
   );
-  if (obstacles.length < 4) {
-    obstacles.push({
-      distance: obstacles[obstacles.length - 1].distance + OBSTACLE_SPACING,
-      offset: Math.floor(Math.random() * 6),
-      pattern: Math.floor(Math.random() * patterns.length),
-    });
-  }
+  if (getCurrentMapLength() < 26) obstacles.push(generateNewObstacle());
 
   playerRotation += (playerRotationTarget - playerRotation) / 3;
 
   // Update game variables
-  tick += 0.0005;
-  position += 0.1;
+  color += 0.0005;
+  obstacles.forEach((o) => (o.distance -= 0.1));
   rotation += rotationSpeed;
 
   lastTickTimestamp = Date.now();
@@ -114,13 +133,7 @@ function renderFrame() {
 
   // Draw out obstacles to buffer
   for (const obstacle of obstacles) {
-    drawHexagonToBuffer(
-      obstacle.distance - position,
-      HEXAGON_THICKNESS,
-      obstacle.pattern,
-      obstacle.offset,
-      rotation
-    );
+    obstacle.obstacle.renderToBuffer(obstacle.distance, rotation);
   }
 
   // Center Hexagon + Player

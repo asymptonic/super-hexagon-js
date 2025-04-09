@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { frameBuffer, frameData, MODE, tick } from '..';
+import { frameBuffer, frameData, MODE, color } from '..';
 import { hslToRgb, htmlColor, rgbToHex } from '../color';
 
 export function renderBuffer() {
@@ -12,11 +12,11 @@ export function renderBuffer() {
     frameBuffer.length
   } ] Render Time [${renderTime < 10 ? '0' : ''}${renderTime}ms] [${frameData.triangleCount} Triangles]`;
   screenBuffer +=
-    chalk.rgb(...hslToRgb(tick % 1, 1, 0.5)).bold(leftHeader) +
+    chalk.rgb(...hslToRgb(color % 1, 1, 0.5)).bold(leftHeader) +
     new Array(frameBuffer[0].length - leftHeader.length - rightHeader.length)
       .fill(' ')
       .join('') +
-    chalk.rgb(...hslToRgb(tick % 1, 1, 0.5))(rightHeader) +
+    chalk.rgb(...hslToRgb(color % 1, 1, 0.5))(rightHeader) +
     '\n';
 
   // Efficiently convert the frame buffer into a single string with color codes to be printed to the console
@@ -36,13 +36,13 @@ export function renderBuffer() {
         //     : lineBuffer;
         screenBuffer +=
           prevInt === 0 // Backdrop
-            ? chalk.bgRgb(...hslToRgb(tick % 1, 1, 0.1))(lineBuffer)
+            ? chalk.bgRgb(...hslToRgb(color % 1, 1, 0.1))(lineBuffer)
             : prevInt === 1 // Backdrop Light
-            ? chalk.bgRgb(...hslToRgb(tick % 1, 1, 0.2))(lineBuffer)
+            ? chalk.bgRgb(...hslToRgb(color % 1, 1, 0.2))(lineBuffer)
             : prevInt === 8 // Wall Dark
-            ? chalk.bgRgb(...hslToRgb(tick % 1, 1, 0.45))(lineBuffer)
+            ? chalk.bgRgb(...hslToRgb(color % 1, 1, 0.45))(lineBuffer)
             : prevInt === 9 // Wall Light
-            ? chalk.bgRgb(...hslToRgb(tick % 1, 1, 0.5))(lineBuffer)
+            ? chalk.bgRgb(...hslToRgb(color % 1, 1, 0.5))(lineBuffer)
             : lineBuffer;
         lineBuffer = '';
       }
