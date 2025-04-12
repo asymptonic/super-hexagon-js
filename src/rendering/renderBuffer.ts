@@ -1,6 +1,6 @@
 import chalk from 'chalk';
-import { frameBuffer, frameData, MODE, color } from '..';
-import { hslToRgb, htmlColor, rgbToHex } from '../color';
+import { color, frameBuffer, frameData, MODE } from '..';
+import { hslToRgb } from '../color';
 
 export function renderBuffer() {
   let screenBuffer = '';
@@ -10,7 +10,9 @@ export function renderBuffer() {
   const renderTime = Date.now() - frameData.startTimestamp;
   const rightHeader = `Frame Buffer Dimentions [ ${frameBuffer[0].length} x ${
     frameBuffer.length
-  } ] Render Time [${renderTime < 10 ? '0' : ''}${renderTime}ms] [${frameData.triangleCount} Triangles]`;
+  } ] Render Time [${renderTime < 10 ? '0' : ''}${renderTime}ms] [${
+    frameData.triangleCount
+  } Triangles]`;
   screenBuffer +=
     chalk.rgb(...hslToRgb(color % 1, 1, 0.5)).bold(leftHeader) +
     new Array(frameBuffer[0].length - leftHeader.length - rightHeader.length)

@@ -1,4 +1,4 @@
-import { drawHexagonToBuffer } from '../renderingEngine/drawHexagon';
+import { drawHexagonToBuffer } from '../rendering/drawHexagon';
 
 export const HEXAGON_THICKNESS = 0.9;
 

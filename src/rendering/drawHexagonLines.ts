@@ -1,6 +1,5 @@
 import { applyCamera } from './camera';
 import { drawLineToBuffer } from './drawLine';
-import { Point } from './utils/Point';
 
 export const patterns: [
   boolean,

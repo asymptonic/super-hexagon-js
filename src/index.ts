@@ -3,15 +3,13 @@ import {
   HEXAGON_THICKNESS,
   Obstacle,
 } from './game/obstacles';
-import { drawBackdropToBuffer } from './renderingEngine/drawBackdrop';
+import { drawBackdropToBuffer } from './rendering/drawBackdrop';
 import {
-  drawHexagonToBuffer,
-  drawFilledInHexagonToBuffer,
-  patterns,
-} from './renderingEngine/drawHexagon';
-import { drawHexagonLinesToBuffer } from './renderingEngine/drawHexagonLines';
-import { drawPlayerToBuffer } from './renderingEngine/drawPlayer';
-import { renderBuffer } from './renderingEngine/renderBuffer';
+  drawFilledInHexagonToBuffer
+} from './rendering/drawHexagon';
+import { drawHexagonLinesToBuffer } from './rendering/drawHexagonLines';
+import { drawPlayerToBuffer } from './rendering/drawPlayer';
+import { renderBuffer } from './rendering/renderBuffer';
 
 export const MODE: 'terminal' | 'html' = 'terminal';
 

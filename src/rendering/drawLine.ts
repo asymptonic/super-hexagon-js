@@ -1,4 +1,4 @@
-import { frameBuffer, HSCALE, SCALE } from "..";
+import { frameBuffer, HSCALE, SCALE } from '..';
 
 export function drawLineToBuffer(
   value: number,
