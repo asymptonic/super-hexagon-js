@@ -42,3 +42,11 @@ export function rgbToHex(r: number, g: number, b: number) {
 export function htmlColor(color: string, text: string) {
   return `<span class="hexagon-text" style="background-color: ${color};">${text}</span>`;
 }
+
+export function textBgRgb(text: string, r: number, g: number, b: number) {
+  return `\x1b[48;2;${r};${g};${b}m${text}\x1b[0m`;
+}
+
+export function textRgb(text: string, r: number, g: number, b: number) {
+  return `\x1b[38;2;${r};${g};${b}m${text}\x1b[0m`;
+}
